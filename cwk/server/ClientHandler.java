@@ -130,7 +130,8 @@ public class ClientHandler extends Thread {
 		try (BufferedWriter FileWriter = new BufferedWriter(new FileWriter("log.txt", true));) {
 
 			FileWriter.write("" + date.toString() + "|" + time.toString() + "|" + inet.getHostAddress() + "|" + request);
-			System.out.println("" + date.toString() + "|" + time.toString() + "|" + inet.getHostAddress() + "|" + request);
+			FileWriter.newLine();
+			// System.out.println("" + date.toString() + "|" + time.toString() + "|" + inet.getHostAddress() + "|" + request);
 
 		} catch ( IOException e ) {
 			e.printStackTrace();
