@@ -16,8 +16,6 @@ public class Client
 
             Socket socket = new Socket( "localhost", 9111);
 
-            // System.out.println( "CLIENT: Connected to server with local port " + socket.getLocalPort() + " connected to remote port " + socket.getPort() + "." );
-
             if("list".equalsIgnoreCase(command)) {
                 handleListRequest(socket);
             } else if ("put".equalsIgnoreCase(command)) {
@@ -37,10 +35,8 @@ public class Client
 
     private void handleListRequest(Socket socket) {
 
-        try {
-
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try ( PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));){
 
             out.println("list");
 
@@ -56,11 +52,9 @@ public class Client
 
     private void handlePutRequest(String filename, Socket socket) {
         
-        try {
-
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        try(PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedReader fileReader = new BufferedReader(new FileReader(filename));
+            BufferedReader fileReader = new BufferedReader(new FileReader(filename));) {
 
             out.println("put " + filename);
 
@@ -77,23 +71,11 @@ public class Client
                 out.println(output);
             }
 
-            // String line;
-            // while ((line = fileReader.readLine()) != null) {
-            //     out.println(line);
-            // }
-
-            // out.println("EOF");
-
             String response = in.readLine();
 
             if (response != null) {
-                System.out.println("Server response: " + response);
+                System.out.println(response);
             }
-
-            out.close();
-            in.close();
-            fileReader.close();
-
         } catch (IOException e ) {
             System.out.println(e);
         }
